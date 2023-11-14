@@ -35,8 +35,7 @@ class MovieService {
 
   fetchMovieById = async (movieId:string) => {
     try {
-      const response = await fetch(API_URL+`/${movieId}`, {
-        
+      const response = await fetch(API_URL + `/${movieId}?info=base_info`, {
         method: "GET",
         headers: {
           "X-RapidAPI-Key":
@@ -60,7 +59,7 @@ class MovieService {
 
   fetchMovieMainActors = async (movieId:string)=>{
       try {
-        const response = await fetch(API_URL+`/${movieId}/crew`, {
+        const response = await fetch(API_URL+`/${movieId}?info=extendedCast`, {
           method: "GET",
           headers: {
             "X-RapidAPI-Key":
@@ -68,11 +67,11 @@ class MovieService {
             "X-RapidAPI-Host": "moviesdatabase.p.rapidapi.com",
           },
         });
-console.log(API_URL+`/${movieId}/main_actors`);
+
 
         if (response.ok) {
           const data = await response.json();
-          console.log(data);
+       
           
           return data;
         } else {
