@@ -38,14 +38,6 @@ export default function MovieSlugPage() {
 
 
 
-{movie?.originalTitleText.text}
-{movie?.releaseDate}
-{movie?.releaseYear.year}
-{movie?.releaseYear.endYear}
-{movie?.titleText.text}
-{movie?.originalTitleText.text}
-
-     
 
 
 
