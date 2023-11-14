@@ -6,26 +6,24 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Movie from "../models/Movie";
+import { InfoOutlined } from "@mui/icons-material";
 
 export default function MovieCard({ movie }: { movie: Movie }) {
   return (
-  <a href={`movies/${movie.id}`} className="">
+    <a href={`movies/${movie.id}`} className="">
       <Card
+        sx={{ maxWidth: 200 }}
+        className="relative group hover:scale-105  transition-all duration-100 cursor-pointer "
+      >
+        <CardMedia
+          sx={{ height: 300, width: 200 }}
+          image={movie.primaryImage?.url}
+          title={movie.titleText.text}
+        />
+        
+          {/* <InfoOutlined className="scale-0 group-hover:scale-100" sx={{position:'absolute',zIndex:1,bottom:0,right:0,color:'white'}} /> */}
     
-      sx={{ maxWidth: 200 }}
-      className="relative group hover:scale-105 transition-all duration-100 cursor-pointer"
-    
-    >
-      <CardMedia
-        sx={{ height: 300, width: 200 }}
-        image={movie.primaryImage?.url}
-        title="green iguana"
-      />
-
-      <CardContent className=" bg-black text-white bg-opacity-40  w-full transition-all duration-150 ease-linear absolute bottom-0 z-10 drop-shadow  font-bold">
-        {movie.titleText.text}
-      </CardContent>
-    </Card>
-  </a>
+      </Card>
+    </a>
   );
 }
