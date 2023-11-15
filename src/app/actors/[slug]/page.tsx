@@ -20,7 +20,7 @@ import {
   ListItemButton,
 } from "@mui/material";
 
-export default function ActorPage() {
+export default async function ActorPage() {
   const params = useParams();
   const { slug } = params; // Access the slug from the URL params
 
@@ -52,4 +52,8 @@ export default function ActorPage() {
 
     </main>
   );
+}
+
+async function getData(){
+  
 }

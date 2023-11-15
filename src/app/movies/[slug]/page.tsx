@@ -4,6 +4,7 @@ import { movieService } from "@/services/movies";
 import { List, Avatar, Stack, Skeleton } from "@mui/material";
 import Link from "next/link";
 import { formatRuntime } from "@/utils/formatRuntime";
+import { ExtendedCast } from "@/models/ExtendedCast";
 
 export default async function MoviePage({
   params,
@@ -14,31 +15,31 @@ export default async function MoviePage({
 }) {
   const { movie, main_actors } = await getData(params.slug);
   return (
-    <main className="   bg-gradient-to-br from-gray-950 via-gray-800 to-emerald-400 min-h-screen flex-col items-center justify-between p-44">
+    <main  className="   bg-gradient-to-br from-gray-950 via-gray-800 to-emerald-400 min-h-screen flex-col items-center justify-between p-44">
       <Box className="  flex  pb-5 ">
         <div className="w-1/2">
           <div className="">
             <h1 className="text-6xl  font-serif"> {movie?.titleText.text} </h1>
             <div className="flex space-x-3 my-4">
-              <span>{movie?.releaseYear.year}</span>
-              <span>{movie?.titleType.text}</span>
-              <span>{formatRuntime(movie?.runtime.seconds!)}</span>
+              <span>{movie?.releaseYear?.year}</span>
+              <span>{movie?.titleType?.text}</span>
+              <span>{formatRuntime(movie?.runtime?.seconds!)}</span>
             </div>
           </div>
           <img
             className="h-auto w-2/6 rounded-md shadow-md"
-            src={movie?.primaryImage.url}
-            alt={movie?.primaryImage.caption.plainText}
+            src={movie?.primaryImage?.url}
+            alt={movie?.primaryImage?.caption?.plainText}
           />
         </div>
         <div className=" w-1/2   flex items-center ">
-          {movie?.plot.plotText.plainText}
+          {movie?.plot?.plotText?.plainText}
         </div>
       </Box>
 
       {movie ? (
         <List sx={{ maxWidth: 400 }}>
-          {main_actors.map((actor) => (
+          {main_actors.map((actor:ExtendedCast) => (
             <Paper elevation={3} sx={{ marginY: 2 }}>
               <Link
                 key={actor.node.name.id}
