@@ -1,34 +1,22 @@
+'use client'
 
-import { movieService } from "../services/movies";
+
 
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import { Container, Stack } from "@mui/material";
-import Link from "next/link";
+
+import {  Stack } from "@mui/material";
+
+import React, { useState, useMemo } from "react";
 import { Movie } from "@/models/Movie";
-import SearchComponent from "@/components/SearchComponent";
+import Link from "next/link";
+import { MovieList } from "@/components/MovieList";
 
-async function getData() {
-  // Fetch movie data
-  const data = await movieService.fetchMovies();
-
-  if (!data) {
-    return {
-      notFound: true,
-    };
-  }
-
-  return {
-    movies: data.results,
-    nextPage: data.next,
-  };
-}
-
-export default async function Home() {
-  const data = await getData();
+import { movieService } from "@/services/movies";
 
 
-
+export default  function Home() {
+   const [movies, setMovies] = useState<Movie[]>([]);
+   const [searchTerm, setSearchTerm] = useState("");
   return (
     <main className="flex  min-h-screen flex-col items-center justify-center p-24">
       <Box>
@@ -53,39 +41,79 @@ export default async function Home() {
           </div>
         </Stack>
       </Box>
-      <Container
-        sx={{ display: "flex",flexDirection:'column', alignItems:'center',justifyContent: "center", paddingY: 10 }}
-      >
+      <div className="my-10">
         <div className="text-5xl font-serif">TITLES</div>
 
-
-
-
-
-<SearchComponent/>
-
-      </Container>
-      <Grid
-        container
-        spacing={4}
-        sx={{ display: "flex", justifyContent: "center" ,position:'relative'}}
-      >
-        {data.movies.map((movie: Movie) => (
-          <Grid >
-            <Link href={`/movies/${movie.id}`}>
-              <div className=" m-2 shadow-md hover:scale-105 transition-all duration-100">
-                <img
-                  src={movie.primaryImage.url}
-                  alt=""
-                  className="  w-full object-cover h-72 rounded-md"
-                />
+        <SearchComponent
+          movies={movies}
+          setMovies={setMovies}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+        />
+      </div>
+      {searchTerm === ''  ? (
+        <MovieList />
+      ) : (
+        <div className="flex flex-wrap p-10">
+          {movies.map(
+            (movie: {
+              id: React.Key | null | undefined;
+              primaryImage: { url: string | undefined };
+            }) => (
+              <div key={movie.id} className="">
+                {movie.primaryImage?.url ? (
+                  <Link href={`/movies/${movie.id}`}>
+                    <div className="shadow-md hover:scale-105 transition-all duration-100">
+                      <img
+                        src={movie.primaryImage?.url}
+                        alt=""
+                        className="w-44 object-cover h-72 rounded-md"
+                      />
+                    </div>
+                  </Link>
+                ) : null}
               </div>
-            </Link>
-          </Grid>
-        ))}
-
-        
-      </Grid>
+            )
+          )}
+        </div>
+      )}
     </main>
   );
 }
+
+
+const SearchComponent = ({ movies, setMovies, searchTerm, setSearchTerm }) => {
+  const delayedSearchMovies = useMemo(() => {
+    let timeoutId: string | number | NodeJS.Timeout | undefined;
+
+    return (value: string) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(async () => {
+        const response = await movieService.searchMovies(value);
+
+        if (response === null) {
+          setMovies([]);
+        } else setMovies(response.results);
+      }, 1000); // Wait for 1 second before making the request
+    };
+  }, [setMovies]);
+
+  const handleInputChange = (e: { target: { value: any; }; }) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    delayedSearchMovies(value);
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center">
+      <input
+        className="p-1 rounded-md text-black"
+        type="text"
+        value={searchTerm}
+        onChange={handleInputChange}
+      />
+
+    
+    </div>
+  );
+};
