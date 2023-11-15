@@ -43,13 +43,13 @@ export default  function Home() {
       </Box>
       <div className="my-10">
         <div className="text-5xl font-serif">TITLES</div>
-{/* 
+
         <SearchComponent
           movies={movies}
           setMovies={setMovies}
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
-        /> */}
+        />
       </div>
       {searchTerm === ''  ? (
         <MovieList />
